@@ -3,4 +3,23 @@ INCLUDE+ Dockerfile.base
 RUN wget -qP /tmp/ https://github.com/just-containers/s6-overlay/releases/download/v1.21.4.0/s6-overlay-amd64.tar.gz \
     && tar xzf /tmp/s6-overlay-amd64.tar.gz -C / && rm /tmp/s6-overlay-amd64.tar.gz
 
+RUN curl -sS https://get.symfony.com/cli/installer | bash
+RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
+RUN echo 'alias ywatch="yarn run encore dev --watch"' >> ~/.bashrc
+RUN echo 'alias con="php bin/console"' >> ~/.bashrc
+RUN echo 'alias grep="grep --color"' >> ~/.bashrc
+RUN echo 'alias ls="ls -l -h --color=auto --group-directories-first"' >> ~/.bashrc
+RUN echo 'alias cacheclear="con cache:clear"' >> ~/.bashrc
+RUN echo 'alias dbvalid="php bin/console doctrine:schema:validate"' >> ~/.bashrc
+RUN echo 'alias dumpSql="php bin/console doctrine:schema:update --dump-sql"' >> ~/.bashrc
+RUN echo 'alias devlog="tail -20 var/log/dev.log | grep CRIT"' >> ~/.bashrc
+RUN echo 'alias prodlog="tail -20 var/log/prod.log | grep CRIT"' >> ~/.bashrc
+RUN echo 'alias ybuild="yarn encore dev"' >> ~/.bashrc
+RUN echo 'alias dumpRout="con fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json"' >> ~/.bashrc
+RUN echo 'alias cachesize="du -h --max-depth=1 ./var/cache/dev/"' >> ~/.bashrc
+RUN echo 'alias dbforce="con doctrine:schema:update --force"' >> ~/.bashrc
+RUN echo 'alias makeGood="dbforce && dumpRout && ybuild && cacheclear"' >> ~/.bashrc
+
+
 ENTRYPOINT ["/init"]
